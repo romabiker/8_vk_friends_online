@@ -1,15 +1,26 @@
+import getpass
+import json
 import vk
 
 
-APP_ID = -1  # чтобы получить app_id, нужно зарегистрировать своё приложение на https://vk.com/dev
+APP_ID = 6140951
+
+
+def prettify_json(json_data):
+    return json.dumps(
+                    json_data,
+                    indent=4,
+                    sort_keys=True,
+                    ensure_ascii=False
+                    )
 
 
 def get_user_login():
-    pass
+    return input('Enter login:  ')
 
 
 def get_user_password():
-    pass
+    return getpass.getpass()
 
 
 def get_online_friends(login, password):
@@ -17,13 +28,18 @@ def get_online_friends(login, password):
         app_id=APP_ID,
         user_login=login,
         user_password=password,
+        scope='friends',
     )
-    api = vk.API(session)
-    # например, api.friends.get()
+    vk_api = vk.API(session)
+    friends_online = vk_api.friends.getOnline()
+    return friends_online
 
 
 def output_friends_to_console(friends_online):
-    pass
+    print('\nOnline FRIENDS:\n')
+    print(prettify_json(friends_online))
+    print()
+
 
 if __name__ == '__main__':
     login = get_user_login()
